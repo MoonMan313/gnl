@@ -16,13 +16,13 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-# define BUFFER_SIZE 3
+# define BUFFER_SIZE 1000
 
 int		ft_strn(char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
 int		get_next_line(int fd, char **line);
-int		get_buf(char **g_buf, char **g_line);
+char	*get_buf(char *g_buf, char **g_line);
 
 #endif

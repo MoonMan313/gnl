@@ -16,13 +16,17 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-# define BUFFER_SIZE 3
+# define BUFFER_SIZE 5
 
 int		ft_strn(char *s);
+// char	*ft_strchr(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
+void	*ft_calloc(size_t count, size_t size);
+void	ft_bzero(void *s, size_t n);
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
-int		get_next_line(int fd, char **line);
-int		get_buf(char **g_buf, char **g_line);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 #endif
