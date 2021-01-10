@@ -15,39 +15,63 @@
 
 #include "get_next_line.h"
 
-int		get_buf(char **g_buf, char **g_line)
+char	*get_buf(char *g_buf, char **g_line)
 {
-	int		n;
-	if((n = ft_strn(*g_buf)) != - 1)
+	int			n;
+	char		*copy;
+	char		*copy_buf;
+
+	copy = *g_line;
+	if((n = ft_strn(g_buf)) != - 1)
 	{
-		*g_buf[n] = '\0';
-		*g_line = ft_strjoin(*g_line, *g_buf);
+		g_buf[n] = '\0';
+		copy_buf = g_buf;
+		*g_line = ft_strjoin(*g_line, g_buf);
+		free(copy);
 		g_buf = &g_buf[n + 1];
-		return (1);			
+		free(copy_buf);
+		return (g_buf);
 	}
-	*g_line = ft_strjoin(*g_line, *g_buf);
-	return(0);
+	*g_line = ft_strjoin(*g_line, g_buf);
+	// if (*g_buf[0] != '\0')
+	// 	free(*g_buf);
+	free(copy);
+	return(NULL);
 }
 
 int		get_next_line(int fd, char **line)
 {
 	static char	*buf;
-	int l;
+	char		*copy;
+	int			n;
+	int			l;
 
-	if (fd < 0|| BUFFER_SIZE <= 0 || !line)
+	if (fd < 0 || BUFFER_SIZE <= 0 || !line)
 		return (-1);
 	*line = 0;
-	if (buf && get_buf(&buf, line))
+	if (buf && (buf = get_buf(buf, line)))
 			return (1);
-	printf ("%s\n", buf);
-	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	if(!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 		return (-1);
 	while ((l = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[l] = '\0';
-		if (buf &&  get_buf(&buf, line))
-			return (1);
+		copy = *line;
+		if((n = ft_strn(buf)) != - 1)
+		{
+			buf[n] = '\0';
+			*line = ft_strjoin(*line, buf);
+			free(copy);
+			copy = buf;
+			buf = &buf[n + 1];
+			free(copy);
+			break;
+		}
+		*line = ft_strjoin(*line, buf);
+		free(copy);
 	}
+	if (l < 0)
+		return (-1);
 	return ((!l) ? 0 : 1);
 }
 
@@ -58,9 +82,14 @@ int main()
 
 	line_buf = "qwertyui fg";
 	fd = open("test.txt", O_RDONLY);
-	while(get_next_line(fd, &line_buf))
+	while(get_next_line(0, &line_buf) > 0)
+	{
 		printf("%s\n", line_buf);
-		//  printf("1\n");
+		free(line_buf);
+	}
+	printf("%s\n", line_buf);
+	free(line_buf);
+		//  printf("\n");
 	// printf("%d\n", get_next_line(fd, &line_buf));
 	// printf("%s\n", line_buf);
 	return (0);

@@ -21,7 +21,7 @@ int		ft_strn(char *s)
 		++i;
 	if (s[i] == '\n')
 		return (i);
-	return (- 1);
+	return (-1);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
