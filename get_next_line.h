@@ -10,19 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
- #ifndef GET_NEXT_LINE_H
- # define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
 # include <unistd.h>
 # include <stdlib.h>
 
-# define BUFFER_SIZE 3
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
 
-int		ft_strn(char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlen(const char *s);
-char	*ft_strdup(const char *s1);
 int		get_next_line(int fd, char **line);
-char	*get_buf(char *g_buf, char **g_line);
+int		get_buf(char **g_buf, char **g_line, int is_in_buf);
+
+char	*line_join(char *dst, char *src, int len);
+int		ft_strn(char *s);
+int		ft_strlen(char *s);
+char	*ft_strdup(char *s1);
 
 #endif

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdionna <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/28 15:34:16 by cdionna           #+#    #+#             */
-/*   Updated: 2020/11/28 15:34:19 by cdionna          ###   ########.fr       */
+/*   Created: 2021/01/24 01:26:25 by cdionna           #+#    #+#             */
+/*   Updated: 2021/01/24 01:26:27 by cdionna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int		get_buf(char **buf, char **line, int is_in_buf)
 {
@@ -38,26 +38,26 @@ int		get_buf(char **buf, char **line, int is_in_buf)
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*buf;
+	static char	*buf[1024];
 	int			l;
 
-	if (BUFFER_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
+	if (BUFFER_SIZE <= 0 || !line || read(fd, buf[fd], 0) < 0)
 		return (-1);
 	*line = ft_strdup("");
-	if (buf && (get_buf(&buf, line, 1)))
+	if (buf[fd] && (get_buf(&buf[fd], line, 1)))
 		return (1);
-	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	if (!(buf[fd] = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 		return (-1);
-	while ((l = read(fd, buf, BUFFER_SIZE)) > 0)
+	while ((l = read(fd, buf[fd], BUFFER_SIZE)) > 0)
 	{
-		buf[l] = '\0';
-		if (get_buf(&buf, line, 0))
+		buf[fd][l] = '\0';
+		if (get_buf(&buf[fd], line, 0))
 			break ;
 	}
 	if (l == 0)
 	{
-		free(buf);
-		buf = NULL;
+		free(buf[fd]);
+		buf[fd] = NULL;
 	}
 	return ((!l) ? 0 : 1);
 }

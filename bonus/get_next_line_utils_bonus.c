@@ -1,16 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdionna <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/28 15:34:33 by cdionna           #+#    #+#             */
-/*   Updated: 2020/11/28 15:34:36 by cdionna          ###   ########.fr       */
+/*   Created: 2021/01/24 01:26:44 by cdionna           #+#    #+#             */
+/*   Updated: 2021/01/24 01:26:46 by cdionna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
+
+char	*line_join(char *dst, char *src, int len)
+{
+	int		i;
+	int		j;
+	char	*buf;
+
+	i = 0;
+	j = ft_strlen(dst) + len + 1;
+	if (!(buf = (char *)malloc(j * sizeof(char))))
+		return (NULL);
+	while (dst[i] != '\0')
+	{
+		buf[i] = dst[i];
+		i++;
+	}
+	free(dst);
+	j = 0;
+	while (src[j] != '\0' && len != j)
+	{
+		buf[i + j + 1] = '\0';
+		buf[i + j] = src[j];
+		j++;
+	}
+	return (buf);
+}
 
 int		ft_strn(char *s)
 {
@@ -21,39 +47,12 @@ int		ft_strn(char *s)
 		++i;
 	if (s[i] == '\n')
 		return (i);
-	return (- 1);
+	return (-1);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+int		ft_strlen(char *s)
 {
-	char	*buf;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	if (!s1 || *s1 == '\0')
-		return (ft_strdup(s2));
-	if (!s2 || *s2 == '\0')
-		return (ft_strdup(s1));
-	j = ft_strlen(s1) + ft_strlen(s2) + 1;
-	if (!s1 || !s2 || !(buf = (char *)malloc(j * sizeof(char))))
-		return (NULL);
-	while (j != i)
-	{
-		j--;
-		while(s1[i])
-		{
-			buf[i] = s1[i];
-			i++;
-		}
-		buf[j] = s2[j -i];
-	}
-	return (buf);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t i;
+	int i;
 
 	i = 0;
 	while (s[i])
@@ -61,16 +60,15 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*dup;
-	size_t	i;
+	int		i;
 
 	i = 0;
-	dup = (char *)malloc((ft_strlen(s1) + 1) * sizeof(char));
-	if (!dup)
+	if (!(dup = (char *)malloc((ft_strlen(s1) + 1) * sizeof(char))))
 		return (0);
-	while(s1[i])
+	while (s1[i])
 	{
 		dup[i] = s1[i];
 		i++;
